@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="integration.AddressBookControllerIT" tests="1" skipped="1" failures="0" errors="0" timestamp="2021-10-17T12:12:08" hostname="Doug.local" time="0.0">
+  <properties/>
+  <testcase name="getHello()" classname="integration.AddressBookControllerIT" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
