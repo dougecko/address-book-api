@@ -16,4 +16,4 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # Ignore Gradle build output directory
-/build/
+/app/build/
