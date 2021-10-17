@@ -1,6 +1,7 @@
 # Ignore IntelliJ Idea config
 .idea
 
+# Ignore Gradle temp dir
 .gradle
 
 # Ignore Gradle GUI config
@@ -16,4 +17,4 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # Ignore Gradle build output directory
-/app/build/
+/build/
