@@ -4,13 +4,11 @@ plugins {
     id 'java'
 }
 
-ext {
-    springBootVersion = '2.5.5'
-}
-
 group = 'shine'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+
+def springBootVersion = '2.5.5'
 
 repositories {
     mavenCentral()
@@ -21,9 +19,13 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
 
+    // validate phone numbers:
+    // boolean isValid = phoneUtil.isValidNumber(swissNumberProto);
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.34'
+
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
-    runtimeOnly 'com.h2database:h2:1.4.200+'
+    runtimeOnly 'com.h2database:h2:1.4.200'
 }
 
 tasks.named('test') {
