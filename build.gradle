@@ -8,7 +8,7 @@ plugins {
 
 group = 'shine'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 def springBootVersion = '2.5.5'
 

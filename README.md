@@ -30,6 +30,11 @@ Standard Spring Boot actuator endpoints include:
 
 ## Instructions
 
+### Prerequisites
+
+- Java 11+ (developed in 17, but not using any language features)
+- Gradle 7 (should be installed by gradle wrapper on first run)
+
 ### Build and test
 
 To download dependencies and compile:
@@ -163,6 +168,7 @@ https://github.com/dougecko/address-book-api/actions
 - when adding a book, the non-id fields of the contact are not returned from the POST, but can be retrieved from the GET subsequently 
 
 ## Possible Extensions (not implemented)
-- Automated linting, spotbugs, static code analysis and/or security / vulnerability checks
-- Security (user authorisation)
+- CI stages: automated linting, spotbugs, static code analysis and/or security / vulnerability checks
+- Security: user authorisation etc
+- Logging: increased detail for monitoring and alerting
 - Prod release pipeline: synthetic tests, canary deployments
