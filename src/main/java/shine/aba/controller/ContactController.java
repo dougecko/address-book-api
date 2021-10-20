@@ -12,19 +12,19 @@ import java.util.List;
 
 @RestController
 @Slf4j
-public class AddressBookController {
+public class ContactController {
 
     private final ContactService contactService;
 
-    public AddressBookController(ContactService contactService) {
+    public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
 
-    @PostMapping("/contacts")
+    @PostMapping("contacts")
     Contact addContact(@Valid @RequestBody Contact contact) {
         final String rawPhoneNumber = contact.getPhone();
 
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        final PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         if (!phoneNumberUtil.isPossibleNumber(rawPhoneNumber, "AU")) {
             log.error("Invalid phone number \"" + rawPhoneNumber + "\"");
             throw new InvalidPhoneNumberException(rawPhoneNumber, "is invalid for Australia");
@@ -32,9 +32,9 @@ public class AddressBookController {
         return contactService.addContact(contact);
     }
 
-    @GetMapping("/contacts/{id}")
-    Contact getContact(@PathVariable Long id) {
-        return contactService.findContact(id);
+    @GetMapping("/contacts/{contactId}")
+    Contact getContact(@PathVariable Long contactId) {
+        return contactService.findContact(contactId);
     }
 
     @GetMapping("/contacts")
@@ -42,8 +42,8 @@ public class AddressBookController {
         return contactService.findAllContacts();
     }
 
-    @DeleteMapping("/contacts/{id}")
-    void removeContact(@PathVariable Long id) {
-        contactService.removeContact(id);
+    @DeleteMapping("/contacts/{contactId}")
+    void removeContact(@PathVariable Long contactId) {
+        contactService.removeContact(contactId);
     }
 }

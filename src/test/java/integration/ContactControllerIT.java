@@ -10,7 +10,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 import shine.aba.Application;
 import shine.aba.model.Contact;
 
@@ -22,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {Application.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
-class AddressBookControllerIT {
+class ContactControllerIT {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -37,7 +35,7 @@ class AddressBookControllerIT {
      * Complex, but happy, path through REST apis.
      */
     @Test
-    @Sql("/resetContact.sql")
+    @Sql("/resetDb.sql")
     void fullLifecycle_withValidParameters_succeeds() throws JsonProcessingException {
         final List<Map<String, Object>> allContactsBeforeAdd = getAllContacts();
         assertEquals(0, allContactsBeforeAdd.size());

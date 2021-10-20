@@ -12,10 +12,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AddressBookControllerTest {
+class ControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Test
+    void getAllBooks() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/books").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     void getAllContacts() throws Exception {

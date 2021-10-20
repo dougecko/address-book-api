@@ -1,0 +1,5 @@
+ALTER TABLE book_contact DROP CONSTRAINT book_contact_foreign_key;
+ALTER TABLE book_contact DROP CONSTRAINT contact_book_foreign_key;
+TRUNCATE TABLE book_contact RESTART IDENTITY;
+TRUNCATE TABLE book RESTART IDENTITY;
+TRUNCATE TABLE contact RESTART IDENTITY;

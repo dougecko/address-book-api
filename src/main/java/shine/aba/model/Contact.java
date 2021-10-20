@@ -5,8 +5,10 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,6 +28,9 @@ public class Contact {
     @NotNull
     @Size(min = 1, max = 25, message = "phone must be between 1 and 255 characters long")
     private String phone;
+
+    @ManyToMany(mappedBy = "contacts")
+    private Set<Book> books;
 
     @Builder
     @SuppressWarnings("unused")
