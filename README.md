@@ -18,7 +18,7 @@ and address books:
 and the intersection between contact and book:
 
 - get all contacts in a book (GET to /books/{bookId}/contacts)
-- get unique contacts from all books (GET to /uniquecontacts)
+- get unique contacts from specified books (POST to /uniquecontacts)
 
 The following utility endpoints are also available: 
 - swagger-ui API spec is served from /api-docs
@@ -116,9 +116,51 @@ https://github.com/dougecko/address-book-api/actions
   - exceptions converted to HTTP codes
 - integration tests using real endpoints to set up test data were preferred to heavy mocking in unit tests
 
-### Test Actions
+### Endpoint Test Examples
 
+#### Add contact
 
+    $ curl -X POST localhost:9999/contacts -H 'Content-Type: application/json' -d '{"name":"Dr Tester","phone":"9123 4242"}'
+
+#### Remove contact
+
+    $ curl -X DELETE localhost:9999/contacts/1
+
+#### Get single contact
+
+    $ curl localhost:9999/contacts/2
+
+#### Get all contacts
+
+    $ curl localhost:9999/contacts
+
+#### Add book
+
+    $ curl -X POST localhost:9999/books -H 'Content-Type: application/json' -d '{"name":"Phonebook","contacts": [{"id": "2"}]}'
+
+#### Remove book
+
+    $ curl -X DELETE localhost:9999/books/3
+
+#### Get single book
+
+    $ curl localhost:9999/books/3
+
+#### Get all books
+
+    $ curl localhost:9999/books
+
+#### Get all contacts in a book
+
+    $ curl localhost:9999/books/3/contacts
+
+#### Get unique contacts from specified books
+
+    $ curl -X POST localhost:9999/uniquecontacts -H 'Content-Type: application/json' -d '{"bookIds": [3]}'
+
+## Known Issues
+
+- when adding a book, the non-id fields of the contact are not returned from the POST, but can be retrieved from the GET subsequently 
 
 ## Possible Extensions (not implemented)
 - Automated linting, spotbugs, static code analysis and/or security / vulnerability checks
