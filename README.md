@@ -14,6 +14,9 @@ To start the application:
 
 To build Docker image:
 
+    $ mkdir -p build/dependency
+    $ cd build/dependency
+    $ jar -xf ../libs/aba-0.0.1-SNAPSHOT.jar
     $ docker build --build-arg JAR_FILE=build/libs/\*.jar -t shine/aba .
 
 To run docker container:
