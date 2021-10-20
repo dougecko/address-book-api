@@ -9,6 +9,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 import shine.aba.Application;
 import shine.aba.model.Contact;
 
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {Application.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 class AddressBookControllerIT {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -34,6 +37,7 @@ class AddressBookControllerIT {
      * Complex, but happy, path through REST apis.
      */
     @Test
+    @Sql("/resetContact.sql")
     void fullLifecycle_withValidParameters_succeeds() throws JsonProcessingException {
         final List<Map<String, Object>> allContactsBeforeAdd = getAllContacts();
         assertEquals(0, allContactsBeforeAdd.size());
@@ -75,7 +79,7 @@ class AddressBookControllerIT {
      */
     @Test
     void getContact_withUnknownId_throws404() {
-        final ResponseEntity<String> response = template.getForEntity(buildUrl("contacts/1"), String.class);
+        final ResponseEntity<String> response = template.getForEntity(buildUrl("contacts/99"), String.class);
         assertEquals(404, response.getStatusCodeValue());
     }
 
@@ -99,6 +103,60 @@ class AddressBookControllerIT {
         secondContact.setId(contactId);
 
         final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), secondContact, String.class);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    /**
+     * Ensure that validation exception is converted to 400 HTTP status code.
+     */
+    @Test
+    void addContact_withTooLongName_throws400() {
+        final Contact contact = Contact.builder()
+                .name("This name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long this name is too long")
+                .phone("12345")
+                .build();
+
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), contact, String.class);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    /**
+     * Ensure that validation exception is converted to 400 HTTP status code.
+     */
+    @Test
+    void addContact_withMissingName_throws400() {
+        final Contact contact = Contact.builder()
+                .phone("12345")
+                .build();
+
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), contact, String.class);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    /**
+     * Ensure that validation exception is converted to 400 HTTP status code.
+     */
+    @Test
+    void addContact_withInvalidPhone_throws400() {
+        final Contact contact = Contact.builder()
+                .name("Guy Chapman")
+                .phone("not a phone number")
+                .build();
+
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), contact, String.class);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    /**
+     * Ensure that validation exception is converted to 400 HTTP status code.
+     */
+    @Test
+    void addContact_withMissingPhone_throws400() {
+        final Contact contact = Contact.builder()
+                .name("Guy Chapman")
+                .build();
+
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), contact, String.class);
         assertEquals(400, response.getStatusCodeValue());
     }
 

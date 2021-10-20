@@ -20,11 +20,11 @@ public class Contact {
     private Long id;
 
     @NotNull
-    @Size(max = 255)
+    @Size(min = 1, max = 255, message = "name must be between 1 and 255 characters long")
     private String name;
 
     @NotNull
-    @Size(max = 255)
+    @Size(min = 1, max = 25, message = "phone must be between 1 and 255 characters long")
     private String phone;
 
     @Builder
