@@ -29,7 +29,7 @@ public class BookController {
         return bookService.findBook(bookId);
     }
 
-    @GetMapping("/book/{bookId}/contacts")
+    @GetMapping("/books/{bookId}/contacts")
     List<Contact> getContactsInBook(@PathVariable Long bookId) {
         return bookService.findContactsInBook(bookId);
     }

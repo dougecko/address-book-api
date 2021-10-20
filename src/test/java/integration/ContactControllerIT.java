@@ -173,7 +173,7 @@ class ContactControllerIT {
         return OBJECT_MAPPER.readValue(getResponse.getBody(), ArrayList.class);
     }
 
-    private String buildUrl(final String path) {
-        return "http://localhost:" + port + "/" + path;
+    private String buildUrl(String path) {
+        return IntegrationTestUtil.buildUrl(port, path);
     }
 }

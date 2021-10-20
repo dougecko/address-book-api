@@ -139,6 +139,6 @@ class BookControllerIT {
     }
 
     private String buildUrl(final String path) {
-        return "http://localhost:" + port + "/" + path;
+        return IntegrationTestUtil.buildUrl(port, path);
     }
 }

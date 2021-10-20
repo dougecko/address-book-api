@@ -8,6 +8,7 @@ import shine.aba.model.Contact;
 import shine.aba.repository.ContactRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ContactService {
@@ -23,7 +24,7 @@ public class ContactService {
         if (null != id && contactRepository.findById(id).isPresent()) {
             throw new ContactAlreadyExistsException(id);
         }
-        return contactRepository.save(contact);
+        return contactRepository.saveAndFlush(contact);
     }
 
     public Contact updateContact(final Contact contact) {
@@ -35,7 +36,7 @@ public class ContactService {
         contactRepository.findById(id)
                 .orElseThrow(() -> new ContactNotFoundException(id));
         // save passed contact with updated details
-        return contactRepository.save(contact);
+        return contactRepository.saveAndFlush(contact);
     }
 
     public void removeContact(final Long id) {
@@ -54,5 +55,15 @@ public class ContactService {
 
     public List<Contact> findAllContacts() {
         return contactRepository.findAll();
+    }
+
+    public List<Contact> findUniqueContactsInBooks(List<Long> books) {
+        // match all contacts that are in any of the passed books
+        // then remove duplicates
+        return findAllContacts().stream()
+                .filter(contact -> contact.getBooks().stream()
+                        .anyMatch(book -> books.contains(book.getId())))
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

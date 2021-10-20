@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import shine.aba.exception.InvalidPhoneNumberException;
 import shine.aba.model.Contact;
+import shine.aba.model.UniqueContactsRequest;
 import shine.aba.service.ContactService;
 
 import javax.validation.Valid;
@@ -45,5 +46,11 @@ public class ContactController {
     @DeleteMapping("/contacts/{contactId}")
     void removeContact(@PathVariable Long contactId) {
         contactService.removeContact(contactId);
+    }
+
+    @PostMapping("/uniquecontacts")
+    List<Contact> getUniqueContacts(@RequestBody UniqueContactsRequest request) {
+        log.debug("getUniqueContacts with " + request.toString());
+        return contactService.findUniqueContactsInBooks(request.getBookIds());
     }
 }

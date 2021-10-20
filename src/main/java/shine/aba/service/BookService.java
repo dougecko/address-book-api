@@ -25,7 +25,7 @@ public class BookService {
         if (null != id && bookRepository.findById(id).isPresent()) {
             throw new BookAlreadyExistsException(id);
         }
-        return bookRepository.save(book);
+        return bookRepository.saveAndFlush(book);
     }
 
     public Book updateBook(final Book book) {
@@ -37,7 +37,7 @@ public class BookService {
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         // save passed book with updated details
-        return bookRepository.save(book);
+        return bookRepository.saveAndFlush(book);
     }
 
     public void removeBook(final Long id) {
@@ -59,6 +59,7 @@ public class BookService {
     }
 
     public List<Contact> findContactsInBook(final Long bookId) {
-        return new ArrayList<>(findBook(bookId).getContacts());
+        final Book book = findBook(bookId);
+        return new ArrayList<>(book.getContacts());
     }
 }

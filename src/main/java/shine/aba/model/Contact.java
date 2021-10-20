@@ -1,6 +1,10 @@
 package shine.aba.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +18,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class Contact {
 
     @Id
@@ -30,6 +33,7 @@ public class Contact {
     private String phone;
 
     @ManyToMany(mappedBy = "contacts")
+    @JsonIgnoreProperties("contacts")
     private Set<Book> books;
 
     @Builder
@@ -37,5 +41,9 @@ public class Contact {
     public Contact(String name, String phone) {
         this.name = name;
         this.phone = phone;
+    }
+
+    public String toString() {
+        return String.format("Contact id=%d, name=%s, phone=%s, number of books=%d", id, name, phone, null == books ? 0 : books.size());
     }
 }

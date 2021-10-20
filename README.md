@@ -114,6 +114,11 @@ https://github.com/dougecko/address-book-api/actions
 - integration tests over Controller
   - happy path
   - exceptions converted to HTTP codes
+- integration tests using real endpoints to set up test data were preferred to heavy mocking in unit tests
+
+### Test Actions
+
+
 
 ## Possible Extensions (not implemented)
 - Automated linting, spotbugs, static code analysis and/or security / vulnerability checks

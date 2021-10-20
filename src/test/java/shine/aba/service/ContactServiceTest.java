@@ -60,7 +60,7 @@ class ContactServiceTest {
     void addContact_whenContactDoesNotExist_succeeds() {
         when(repository.findById(CONTACT_ID)).thenReturn(Optional.empty());
 
-        when(repository.save(any())).thenReturn(NEW_CONTACT);
+        when(repository.saveAndFlush(any())).thenReturn(NEW_CONTACT);
 
         final Contact addedContact = service.addContact(NEW_CONTACT);
         assertEquals(NEW_CONTACT, addedContact);
@@ -77,7 +77,7 @@ class ContactServiceTest {
     void updateContact_whenContactExists_succeeds() {
         when(repository.findById(CONTACT_ID)).thenReturn(Optional.of(EXISTING_CONTACT));
 
-        when(repository.save(any())).thenReturn(NEW_CONTACT);
+        when(repository.saveAndFlush(any())).thenReturn(NEW_CONTACT);
 
         final Contact updatedContact = service.updateContact(NEW_CONTACT);
         assertEquals(NEW_CONTACT, updatedContact);

@@ -57,7 +57,7 @@ class BookServiceTest {
     void addBook_whenBookDoesNotExist_succeeds() {
         when(repository.findById(BOOK_ID)).thenReturn(Optional.empty());
 
-        when(repository.save(any())).thenReturn(NEW_BOOK);
+        when(repository.saveAndFlush(any())).thenReturn(NEW_BOOK);
 
         final Book addedBook = service.addBook(NEW_BOOK);
         assertEquals(NEW_BOOK, addedBook);
@@ -74,7 +74,7 @@ class BookServiceTest {
     void updateBook_whenBookExists_succeeds() {
         when(repository.findById(BOOK_ID)).thenReturn(Optional.of(EXISTING_BOOK));
 
-        when(repository.save(any())).thenReturn(NEW_BOOK);
+        when(repository.saveAndFlush(any())).thenReturn(NEW_BOOK);
 
         final Book updatedBook = service.updateBook(NEW_BOOK);
         assertEquals(NEW_BOOK, updatedBook);
