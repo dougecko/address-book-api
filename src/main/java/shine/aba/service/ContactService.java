@@ -31,9 +31,10 @@ public class ContactService {
         if (null == id) {
             throw new ContactNotFoundException();
         }
-        // verify contact exists, but save passed contact with updated details
+        // verify contact exists
         contactRepository.findById(id)
                 .orElseThrow(() -> new ContactNotFoundException(id));
+        // save passed contact with updated details
         return contactRepository.save(contact);
     }
 
@@ -41,6 +42,7 @@ public class ContactService {
         try {
             contactRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            // convert exception so ResponseStatus is used
             throw new ContactNotFoundException(id);
         }
     }

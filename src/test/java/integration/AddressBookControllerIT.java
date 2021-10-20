@@ -31,10 +31,10 @@ class AddressBookControllerIT {
     private TestRestTemplate template;
 
     /**
-     * Happy path through REST apis.
+     * Complex, but happy, path through REST apis.
      */
     @Test
-    void lifecycle() throws JsonProcessingException {
+    void fullLifecycle_withValidParameters_succeeds() throws JsonProcessingException {
         final List<Map<String, Object>> allContactsBeforeAdd = getAllContacts();
         assertEquals(0, allContactsBeforeAdd.size());
 
@@ -42,8 +42,7 @@ class AddressBookControllerIT {
                 .name("Pepe King Prawn")
                 .phone("12345")
                 .build();
-        final ResponseEntity<String> postResponse = template.postForEntity(buildUrl("contacts"), newContact, String.class);
-        assertTrue(postResponse.getStatusCode().is2xxSuccessful());
+        createContact(newContact);
 
         final List<Map<String, Object>> allContactsAfterAdd = getAllContacts();
         assertEquals(1, allContactsAfterAdd.size());
@@ -71,13 +70,51 @@ class AddressBookControllerIT {
         assertEquals(0, allContactsAfterDelete.size());
     }
 
+    /**
+     * Ensure that ContactNotFoundException is converted to 404 HTTP status code.
+     */
+    @Test
+    void getContact_withUnknownId_throws404() {
+        final ResponseEntity<String> response = template.getForEntity(buildUrl("contacts/1"), String.class);
+        assertEquals(404, response.getStatusCodeValue());
+    }
+
+    /**
+     * Ensure that ContactAlreadyExistsException is converted to 400 HTTP status code.
+     */
+    @Test
+    void addContact_withExistingId_throws400() throws JsonProcessingException {
+        final Contact firstContact = Contact.builder()
+                .name("Pepe King Prawn")
+                .phone("12345")
+                .build();
+        // let the DB assign an id
+        final Long contactId = createContact(firstContact);
+
+        final Contact secondContact = Contact.builder()
+                .name("Rizzo the Rat")
+                .phone("54321")
+                .build();
+        // use the same id as the first contact
+        secondContact.setId(contactId);
+
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), secondContact, String.class);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    private Long createContact(Contact contact) throws JsonProcessingException {
+        final ResponseEntity<String> response = template.postForEntity(buildUrl("contacts"), contact, String.class);
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+
+        return OBJECT_MAPPER.readValue(response.getBody(), Contact.class).getId();
+    }
+
     private List<Map<String, Object>> getAllContacts() throws JsonProcessingException {
         final ResponseEntity<String> getResponse = template.getForEntity(buildUrl("contacts"), String.class);
         assertTrue(getResponse.getStatusCode().is2xxSuccessful());
 
-        @SuppressWarnings("unchecked")
-        final List<Map<String, Object>> allContacts = OBJECT_MAPPER.readValue(getResponse.getBody(), ArrayList.class);
-        return allContacts;
+        //noinspection unchecked
+        return OBJECT_MAPPER.readValue(getResponse.getBody(), ArrayList.class);
     }
 
     private String buildUrl(final String path) {

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import shine.aba.model.Contact;
 import shine.aba.service.ContactService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class AddressBookController {
     }
 
     @PostMapping("/contacts")
-    Contact addContact(@RequestBody Contact contact) {
+    Contact addContact(@Valid @RequestBody Contact contact) {
         return contactService.addContact(contact);
     }
 
