@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AddressBookControllerIT {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @LocalServerPort
     private int port;
 
@@ -33,6 +35,9 @@ class AddressBookControllerIT {
      */
     @Test
     void lifecycle() throws JsonProcessingException {
+        final List<Map<String, Object>> allContactsBeforeAdd = getAllContacts();
+        assertEquals(0, allContactsBeforeAdd.size());
+
         final Contact newContact = Contact.builder()
                 .name("Pepe King Prawn")
                 .phone("12345")
@@ -40,28 +45,38 @@ class AddressBookControllerIT {
         final ResponseEntity<String> postResponse = template.postForEntity(buildUrl("contacts"), newContact, String.class);
         assertTrue(postResponse.getStatusCode().is2xxSuccessful());
 
-        List<Map<String, String>> allContactsAfterAdd = getAllContacts();
+        final List<Map<String, Object>> allContactsAfterAdd = getAllContacts();
         assertEquals(1, allContactsAfterAdd.size());
 
-        final Map<String, String> contact = allContactsAfterAdd.get(0);
-        assertNotNull(contact.get("id"));
-        assertEquals(newContact.getName(), contact.get("name"));
-        assertEquals(newContact.getPhone(), contact.get("phone"));
+        final Map<String, Object> firstAddedContact = allContactsAfterAdd.get(0);
+        final Integer newId = (Integer) firstAddedContact.get("id");
+        assertNotNull(newId);
+        assertEquals(newContact.getName(), firstAddedContact.get("name"));
+        assertEquals(newContact.getPhone(), firstAddedContact.get("phone"));
 
-        final ResponseEntity<String> deleteResponse = template.exchange(buildUrl("contacts/1"), HttpMethod.DELETE, null, String.class);
+        final String newContactPath = "contacts/" + newId;
+
+        // test second endpoint to return same new contact
+        final ResponseEntity<String> getResponse = template.getForEntity(buildUrl(newContactPath), String.class);
+        assertTrue(getResponse.getStatusCode().is2xxSuccessful());
+        final Contact addedContact = OBJECT_MAPPER.readValue(getResponse.getBody(), Contact.class);
+        assertEquals(String.valueOf(firstAddedContact.get("id")), String.valueOf(addedContact.getId()));
+        assertEquals(firstAddedContact.get("name"), addedContact.getName());
+        assertEquals(firstAddedContact.get("phone"), addedContact.getPhone());
+
+        final ResponseEntity<String> deleteResponse = template.exchange(buildUrl(newContactPath), HttpMethod.DELETE, null, String.class);
         assertTrue(deleteResponse.getStatusCode().is2xxSuccessful());
 
-        List<Map<String, String>> allContactsAfterDelete = getAllContacts();
+        final List<Map<String, Object>> allContactsAfterDelete = getAllContacts();
         assertEquals(0, allContactsAfterDelete.size());
     }
 
-    private List<Map<String, String>> getAllContacts() throws JsonProcessingException {
+    private List<Map<String, Object>> getAllContacts() throws JsonProcessingException {
         final ResponseEntity<String> getResponse = template.getForEntity(buildUrl("contacts"), String.class);
         assertTrue(getResponse.getStatusCode().is2xxSuccessful());
 
-        final ObjectMapper mapper = new ObjectMapper();
         @SuppressWarnings("unchecked")
-        List<Map<String, String>> allContacts = mapper.readValue(getResponse.getBody(), ArrayList.class);
+        final List<Map<String, Object>> allContacts = OBJECT_MAPPER.readValue(getResponse.getBody(), ArrayList.class);
         return allContacts;
     }
 

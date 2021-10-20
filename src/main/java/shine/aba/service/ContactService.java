@@ -1,6 +1,8 @@
 package shine.aba.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+import shine.aba.exception.ContactAlreadyExistsException;
 import shine.aba.exception.ContactNotFoundException;
 import shine.aba.model.Contact;
 import shine.aba.repository.ContactRepository;
@@ -17,7 +19,10 @@ public class ContactService {
     }
 
     public Contact addContact(final Contact contact) {
-        // TODO: validate contact does not exist
+        final Long id = contact.getId();
+        if (null != id && contactRepository.findById(id).isPresent()) {
+            throw new ContactAlreadyExistsException(id);
+        }
         return contactRepository.save(contact);
     }
 
@@ -33,7 +38,11 @@ public class ContactService {
     }
 
     public void removeContact(final Long id) {
-        contactRepository.deleteById(id);
+        try {
+            contactRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ContactNotFoundException(id);
+        }
     }
 
     public Contact findContact(final Long id) {
