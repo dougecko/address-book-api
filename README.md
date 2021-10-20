@@ -171,5 +171,5 @@ https://github.com/dougecko/address-book-api/actions
 - CI stages: automated linting, spotbugs, static code analysis and/or security / vulnerability checks
 - Security: user authorisation etc
 - Logging: increased detail for monitoring and alerting
-- Performance: testing
+- Performance: ensure app can support production load (x3?)
 - Prod release pipeline: synthetic tests, canary deployments
