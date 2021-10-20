@@ -1,7 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.5'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.5.5'
+    id "io.freefair.lombok" version "6.2.0"
 }
 
 group = 'shine'
@@ -19,9 +20,15 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
 
+    // validation annotations
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+
     // validate phone numbers:
     // boolean isValid = phoneUtil.isValidNumber(swissNumberProto);
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.34'
+
+    // StringUtils
+//    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 

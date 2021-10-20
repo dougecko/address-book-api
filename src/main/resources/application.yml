@@ -4,7 +4,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
-    url: jdbc:h2:mem:aba
+    url: jdbc:h2:mem:aba;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
     password: password
@@ -15,3 +15,7 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
