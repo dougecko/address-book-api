@@ -11,3 +11,11 @@ To run unit tests:
 To start the application:
 
     $ ./gradlew bootRun
+
+To build Docker image:
+
+    $ docker build --build-arg JAR_FILE=build/libs/\*.jar -t shine/aba .
+
+To run docker container:
+
+    $ docker run -p 9999:9999 -t shine/aba
