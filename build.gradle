@@ -32,7 +32,11 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
+    // In-memory database
     runtimeOnly 'com.h2database:h2:1.4.200'
+
+    // OpenAPI3 specification generation and endpoint
+    runtimeOnly 'org.springdoc:springdoc-openapi-ui:1.5.11'
 }
 
 tasks.named('test') {
