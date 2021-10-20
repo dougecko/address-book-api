@@ -2,7 +2,8 @@ plugins {
     id 'java'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.5'
-    id "io.freefair.lombok" version "6.2.0"
+    id 'io.freefair.lombok' version '6.2.0'
+    id 'jacoco'
 }
 
 group = 'shine'
@@ -45,4 +46,5 @@ tasks.named('test') {
 
 test {
     reports.html.required = true
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }

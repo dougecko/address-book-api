@@ -17,7 +17,6 @@ public class Contact {
 
     @Id
     @GeneratedValue
-//    @Builder.Default
     private Long id;
 
     @NotNull
