@@ -78,7 +78,7 @@ public class UniqueContactsControllerIT {
         // ensure that the rat doesn't appear twice in final set, even though it's included in both books
         assertEquals(3, uniqueContacts.size());
 
-        // since everything is already nicely set up, test this endpoint as well
+        // since everything is already nicely set up, test the "contacts in specified book" endpoint as well
         final ResponseEntity<String> getResponse = template.getForEntity(buildUrl("books/" + bookId1 + "/contacts"), String.class);
         assertTrue(getResponse.getStatusCode().is2xxSuccessful());
 
