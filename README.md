@@ -20,13 +20,14 @@ and the intersection between contact and book:
 - get all contacts in a book (GET to /books/{bookId}/contacts)
 - get unique contacts from specified books (POST to /uniquecontacts)
 
+(All these endpoints may optionally include a trailing slash.)
+
 The following utility endpoints are also available: 
 - swagger-ui API spec is served from /api-docs
 - H2 database console is served from /db (user = sa, no password)
 
-Standard Spring Boot actuator endpoints include:
+Standard Spring Boot actuator endpoints are enabled, including:
 - health check: /actuator/health
-- app info: /actuator/info
 
 ## Instructions
 
@@ -84,6 +85,10 @@ To run docker container:
 
 Application logs can be found in `/logs/spring-boot-logger.log`, containing
 HTTP access, error details and other normal Spring logs.
+
+## Persistence
+
+Spring JPA is used to persist to an in-memory H2 database.  This is recreated on every application restart.
 
 ## Continuous Integration
 
@@ -168,6 +173,7 @@ https://github.com/dougecko/address-book-api/actions
 - when adding a book, the non-id fields of the contact are not returned from the POST, but can be retrieved from the GET subsequently 
 
 ## Possible Extensions (not implemented)
+- API spec: add comments, error codes and the phone validation rules
 - CI stages: automated linting, spotbugs, static code analysis and/or security / vulnerability checks
 - Security: user authorisation etc
 - Logging: increased detail for monitoring and alerting
